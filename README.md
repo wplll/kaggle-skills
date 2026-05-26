@@ -1,4 +1,4 @@
-# kaggle-skill
+# kaggle-skills
 
 End-to-end Kaggle competition automation for Claude Code: research a competition from a slug, archive past editions and similar competitions, fork and patch notebooks safely, push and monitor kernels, diagnose failures, and keep an append-only experiment ledger — all surfaced as slash commands.
 
@@ -7,7 +7,7 @@ End-to-end Kaggle competition automation for Claude Code: research a competition
 ### Windows / PowerShell
 
 ```powershell
-cd <path-to>\kaggle-skill
+cd <path-to>\kaggle-skills
 pwsh -File install.ps1            # user-wide: %USERPROFILE%\.claude
 pwsh -File install.ps1 -Force     # overwrite an earlier version
 pwsh -File install.ps1 -Scope project  # install into ./.claude in CWD
@@ -16,7 +16,7 @@ pwsh -File install.ps1 -Scope project  # install into ./.claude in CWD
 ### macOS / Linux / WSL
 
 ```bash
-cd <path-to>/kaggle-skill
+cd <path-to>/kaggle-skills
 ./install.sh                      # user-wide: ~/.claude
 ./install.sh --force              # overwrite an earlier version
 ./install.sh --project            # install into ./.claude in CWD
@@ -89,7 +89,7 @@ research/<slug>/
 ## Requirements
 
 - Python 3.9+ with the `kaggle` package importable (`python -m kaggle.cli --version` should work).
-- A configured `kaggle.json`; the skill never prints its contents.
+- A configured `kaggle.json`; the skills never prints its contents.
 - On Windows, the install scripts assume PowerShell. Set `$env:PYTHONUTF8=1` and `$env:PYTHONIOENCODING="utf-8"` before manual Kaggle CLI runs.
 
 ## Safety
@@ -102,7 +102,7 @@ research/<slug>/
 ## Layout in the Repo
 
 ```
-kaggle-skill/
+kaggle-skills/
 ├── SKILL.md
 ├── README.md
 ├── install.ps1
