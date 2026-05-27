@@ -64,6 +64,16 @@ kaggle datasets create -p <dir>
 kaggle datasets version -p <dir> -m "message"
 ```
 
+Prefer `scripts/kaggle_data.py` for downloads/uploads because it adds UTF-8 handling, CLI fallback, safe zip extraction, local preflight, and a `--yes` gate before dataset create/version.
+
+```powershell
+python scripts/kaggle_data.py download-competition <competition> data/<competition> --unzip
+python scripts/kaggle_data.py download-dataset <owner>/<slug> data/<slug> --unzip
+python scripts/kaggle_data.py init-upload <dir> --id <owner>/<dataset-slug> --title "dataset title"
+python scripts/kaggle_data.py create <dir> --yes
+python scripts/kaggle_data.py version <dir> -m "message" --yes
+```
+
 ## Models
 
 Kaggle model source access may require browser workspace actions. If CLI cannot verify model access, report the manual check needed instead of assuming availability.

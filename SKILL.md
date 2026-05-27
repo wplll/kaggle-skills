@@ -1,6 +1,6 @@
 ---
 name: kaggle-skill
-description: Automate Kaggle competition research and notebook workflows. Use when Codex needs to investigate a Kaggle competition from a slug, read public Code/kernels and Discussion topics, archive past editions or similar competitions for prior-art writeups and hot threads, produce a research report, select and reproduce an open baseline, design safe optimization phases, edit or fork notebooks, validate kernel-metadata.json, push Kaggle kernels, monitor runs, pull logs/output, diagnose Kaggle CLI/kernel/submission failures, record leaderboard experiments in an append-only ledger, or manage follow-up monitoring for new Kaggle Code and Discussion content. Trigger on kaggle, Kaggle CLI, competition slug, kernel-metadata.json, kaggle kernels push, Kaggle Notebook, fork notebook, publicScore empty, GBK codec errors, title does not resolve, KernelWorkerStatus, Kaggle Discussion, Kaggle Code research, past editions, prior year competition, similar competition, solution writeup, Nth place solution, experiment ledger, or experiment record.
+description: Automate Kaggle competition research, data handling, and notebook workflows. Use when Codex needs to investigate a Kaggle competition from a slug, read public Code/kernels and Discussion topics, archive past editions or similar competitions for prior-art writeups and hot threads, download Kaggle competition files or datasets, initialize/upload/version local data as Kaggle Datasets, produce a research report, select and reproduce an open baseline, design safe optimization phases, edit or fork notebooks, validate kernel-metadata.json, push Kaggle kernels, monitor runs, pull logs/output, diagnose Kaggle CLI/kernel/submission failures, record leaderboard experiments in an append-only ledger, or manage follow-up monitoring for new Kaggle Code and Discussion content. Trigger on kaggle, Kaggle CLI, competition slug, kernel-metadata.json, dataset-metadata.json, kaggle datasets download, kaggle datasets create, kaggle datasets version, kaggle kernels push, Kaggle Notebook, fork notebook, publicScore empty, GBK codec errors, title does not resolve, KernelWorkerStatus, Kaggle Discussion, Kaggle Code research, past editions, prior year competition, similar competition, solution writeup, Nth place solution, experiment ledger, or experiment record.
 ---
 
 # Kaggle Skill
@@ -10,6 +10,7 @@ description: Automate Kaggle competition research and notebook workflows. Use wh
 - `/kaggle-research <slug>` — full research pipeline; writes `report.md` + `state.json`
 - `/kaggle-past <slug>` — archive past editions and similar competitions
 - `/kaggle-fork <owner>/<slug> <work-dir>` — pull, patch, preflight (no auto push)
+- `/kaggle-data <subcmd> ...` — download competition/dataset files or safely create/version Kaggle Datasets
 - `/kaggle-experiment <subcmd> --competition <slug> ...` — append-only experiment ledger
 - `/kaggle-watch <slug>` — diff new kernels and discussion topics
 - `/kaggle-diagnose <symptom> [--log path]` — match the diagnostics error table
@@ -22,6 +23,7 @@ description: Automate Kaggle competition research and notebook workflows. Use wh
 - If the installed Kaggle CLI lacks Discussion/topic commands, use Kaggle's read-only JSON API fallback to resolve `forumId`, list topics, and archive selected topic details.
 - Treat `kaggle.json` as secret material. Check existence and permissions only; never print the username/key payload.
 - Do not consume leaderboard submissions, publish notebooks/datasets, or perform final submission without explicit user confirmation.
+- Do not upload local data to Kaggle without showing the file count, total size, metadata id/title, and suspicious-file warnings first.
 - For Kernel-only competitions, do not assume CLI file submission is allowed. Prefer notebook-version submission only when officially supported and still ask before consuming quota.
 - Run preflight before kernel push. Run log verification before recommending submission.
 - Prefer reproducible baseline replay before optimization. Change one major variable per leaderboard phase.
@@ -32,6 +34,7 @@ description: Automate Kaggle competition research and notebook workflows. Use wh
 - For "research this competition" or a competition slug: read `references/research-pipeline.md`, then run or adapt `scripts/research_competition.py`. Slash command: `/kaggle-research <slug>`.
 - For "past editions", "previous year", "similar competition", "Nth place solution", or prior-art lookup: read `references/past-competitions.md`, then run `scripts/past_competitions.py` with `--auto-years`, `--past`, or `--search`. Slash command: `/kaggle-past <slug>`.
 - For fork/pull/patch/push/monitor/output flows: read `references/workflow.md`, then use `scripts/preflight_check.py`, `scripts/apply_ipynb_patch.py`, `scripts/monitor_kernel.py`, and `scripts/verify_kernel_log.py` as needed. Slash command: `/kaggle-fork <owner>/<slug> <work-dir>`.
+- For downloading competition files/datasets or uploading local data as a Kaggle Dataset: read `references/data-workflow.md`, then use `scripts/kaggle_data.py`. Slash command: `/kaggle-data <subcmd> ...`.
 - For recording leaderboard experiments, phase decisions, or rendering an experiment summary: use `scripts/record_experiment.py` (`add` / `update` / `list` / `show` / `report`). See `references/submission-strategy.md`. Slash command: `/kaggle-experiment <subcmd> --competition <slug> ...`.
 - For errors such as GBK decode, title/id mismatch, 403, missing submission, timeout, empty publicScore, or KernelWorkerStatus.ERROR: read `references/diagnostics.md`. Slash command: `/kaggle-diagnose <symptom> [--log path]`.
 - For watch updates and detecting new public Code/Discussion content: run `scripts/update_research_watch.py`. Slash command: `/kaggle-watch <slug>`.
@@ -55,6 +58,7 @@ description: Automate Kaggle competition research and notebook workflows. Use wh
 - Store research under `research/<competition-slug>/`.
 - Use `report.md` for competition research.
 - Use `past/` for archived prior-edition and similar competition material.
+- Use `data/` or user-specified directories for downloaded Kaggle data; record pinned dataset refs in research notes when reproducibility matters.
 - Use `optimization_plan.md` for phase design.
 - Use `experiments.jsonl` and `experiments.md` for the leaderboard experiment ledger.
 - Use `state.json` for monitoring cursors and experiment history.

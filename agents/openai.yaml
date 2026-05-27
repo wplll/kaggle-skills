@@ -1,7 +1,7 @@
 interface:
   display_name: "Kaggle Automation"
-  short_description: "Research, optimize, push, and monitor Kaggle notebooks."
-  default_prompt: "Use $kaggle-skill to research a Kaggle competition, summarize Code and Discussion signals, select a reproducible baseline, design a safe optimization plan, and manage notebook push verification."
+  short_description: "Research, data, notebooks, and submissions for Kaggle."
+  default_prompt: "Use $kaggle-skill to research a Kaggle competition, manage datasets safely, select a reproducible baseline, design a safe optimization plan, and manage notebook push verification."
 
 policy:
   allow_implicit_invocation: true

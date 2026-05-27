@@ -1,6 +1,6 @@
 # kaggle-skills
 
-End-to-end Kaggle competition automation for Claude Code: research a competition from a slug, archive past editions and similar competitions, fork and patch notebooks safely, push and monitor kernels, diagnose failures, and keep an append-only experiment ledger — all surfaced as slash commands.
+End-to-end Kaggle competition automation for Claude Code: research a competition from a slug, archive past editions and similar competitions, download/upload Kaggle data safely, fork and patch notebooks safely, push and monitor kernels, diagnose failures, and keep an append-only experiment ledger — all surfaced as slash commands.
 
 ## Install
 
@@ -45,6 +45,7 @@ The uninstaller deletes files one explicit path at a time and only removes direc
 | `/kaggle-research <slug>` | Run the full research pipeline; write `report.md`, `state.json`, and `raw/` archives. |
 | `/kaggle-past <slug>` | Archive past editions and similar competitions; capture top kernels and Nth-place solution writeups. |
 | `/kaggle-fork <owner>/<slug> <work-dir>` | Pull, lock metadata, patch notebook, and run preflight. Never auto-pushes. |
+| `/kaggle-data <subcmd> ...` | Download competition/dataset files, initialize local dataset metadata, or create/version Kaggle Datasets after confirmation. |
 | `/kaggle-experiment <subcmd> --competition <slug> ...` | Append-only experiment ledger. Subcommands: `add`, `update`, `list`, `show`, `report`. |
 | `/kaggle-watch <slug>` | Diff new public kernels and discussion topics against the saved watch state. |
 | `/kaggle-diagnose <symptom> [--log path]` | Match the symptom against the diagnostics error table and the fatal-marker scan. |
@@ -53,6 +54,7 @@ The uninstaller deletes files one explicit path at a time and only removes direc
 
 ```text
 /kaggle-research birdclef-2026
+/kaggle-data download-competition birdclef-2026 data/birdclef-2026 --unzip
 /kaggle-past birdclef-2026 --auto-years --years 2021 2025
 # pick a baseline from research/birdclef-2026/report.md
 /kaggle-fork <owner>/<slug> work/baseline --new-slug me/birdclef-2026-p0 --title "birdclef 2026 p0 baseline"
@@ -73,6 +75,7 @@ research/<slug>/
 ├── experiments.jsonl    # append-only experiment ledger
 ├── experiments.md       # rendered experiment summary
 ├── watch_delta.json     # most recent /kaggle-watch diff
+├── data/                # optional downloaded competition/dataset files
 ├── raw/                 # archived CLI/API outputs
 └── past/
     ├── index.md         # cross-edition index
@@ -95,6 +98,7 @@ research/<slug>/
 ## Safety
 
 - Never auto-pushes a kernel or auto-submits to the leaderboard. Both require explicit user confirmation per invocation.
+- Never uploads local data to Kaggle without an explicit `--yes` gate and a visible file/metadata preflight.
 - Never modifies `git config` or runs destructive git commands.
 - Treats `kaggle.json` as secret material.
 - Internal Kaggle JSON endpoints are used only for read-only fallback when the installed CLI lacks Discussion/topic commands; raw responses are archived under `raw/` and labeled.
@@ -114,12 +118,14 @@ kaggle-skills/
 │   ├── kaggle-research.md
 │   ├── kaggle-past.md
 │   ├── kaggle-fork.md
+│   ├── kaggle-data.md
 │   ├── kaggle-experiment.md
 │   ├── kaggle-watch.md
 │   └── kaggle-diagnose.md
 ├── references/
 │   ├── research-pipeline.md
 │   ├── past-competitions.md
+│   ├── data-workflow.md
 │   ├── workflow.md
 │   ├── kaggle-cli-cheatsheet.md
 │   ├── submission-strategy.md
@@ -127,6 +133,7 @@ kaggle-skills/
 └── scripts/
     ├── research_competition.py
     ├── past_competitions.py
+    ├── kaggle_data.py
     ├── preflight_check.py
     ├── apply_ipynb_patch.py
     ├── monitor_kernel.py
