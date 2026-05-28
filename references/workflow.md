@@ -53,6 +53,14 @@ python scripts/monitor_kernel.py <user>/<slug>
 python scripts/verify_kernel_log.py <user>/<slug> <work_dir>\output
 ```
 
+8. Submit a completed notebook version only after user confirmation:
+
+```powershell
+python scripts/submit_notebook.py <competition> --kernel <user>/<slug> --version <N> -m "message"
+# If validation is clean and the user confirms quota use:
+python scripts/submit_notebook.py <competition> --kernel <user>/<slug> --version <N> -m "message" --yes
+```
+
 ## Metadata Rules
 
 - `title` must slugify to the `id` suffix.
@@ -75,3 +83,18 @@ python scripts/verify_kernel_log.py <user>/<slug> <work_dir>\output
 
 Expected competition output usually includes `/kaggle/working/submission.csv`. If missing, inspect log and notebook write paths before submission.
 
+## Notebook Version Submission
+
+Kaggle CLI supports notebook-version submission for code competitions:
+
+```powershell
+kaggle competitions submit <competition> -k <user>/<notebook-slug> -f submission.csv -v <version> -m "message"
+```
+
+Before running it:
+
+- require `KernelWorkerStatus.COMPLETE`
+- pull output for the target version
+- verify logs for fatal markers
+- verify the output file exists
+- ask the user before consuming quota

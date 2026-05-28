@@ -9,6 +9,7 @@ Use this reference for leaderboard experiments, baseline replay, sidecar risk, h
 - Record failed submissions; failures are evidence.
 - Do not optimize from an unreproduced baseline.
 - Do not spend LB quota without explicit user confirmation.
+- For code competitions, submit completed notebook versions with `kaggle competitions submit <competition> -k <kernel> -f <output-file> -v <version> -m <message>` only after validation and confirmation.
 
 ## Experiment Record
 
@@ -51,6 +52,18 @@ Rules:
 - Failed runs and rejected submissions are evidence — record them with the failure mode and decision.
 - Run `report` at every phase boundary so the rendered `experiments.md` stays close to the leaderboard state.
 
+## Notebook Submit Gate
+
+Use `scripts/submit_notebook.py` without `--yes` first. It should:
+
+- confirm the latest kernel status is COMPLETE unless explicitly skipped
+- pull output for the requested version
+- scan logs for fatal markers
+- verify `submission.csv` or the requested file exists
+- print the exact Kaggle CLI submit command
+
+Only rerun with `--yes` after the user confirms leaderboard quota use.
+
 ## Sidecar And Ensemble Risk
 
 For each added model or sidecar:
@@ -79,4 +92,3 @@ Use final slots for genuinely different risk profiles:
 - diverse pole: structurally different model/data/feature path
 
 Avoid spending two final slots on same-structure variants unless evidence says variance is low and one dominates.
-

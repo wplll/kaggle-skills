@@ -1,6 +1,6 @@
 # kaggle-skills
 
-End-to-end Kaggle competition automation for Claude Code: research a competition from a slug, archive past editions and similar competitions, download/upload Kaggle data safely, fork and patch notebooks safely, push and monitor kernels, diagnose failures, and keep an append-only experiment ledger — all surfaced as slash commands.
+End-to-end Kaggle competition automation for Claude Code: research a competition from a slug, archive past editions and similar competitions, download/upload Kaggle data safely, fork and patch notebooks safely, push and monitor kernels, submit completed notebook versions after confirmation, diagnose failures, and keep an append-only experiment ledger — all surfaced as slash commands.
 
 ## Install
 
@@ -46,6 +46,7 @@ The uninstaller deletes files one explicit path at a time and only removes direc
 | `/kaggle-past <slug>` | Archive past editions and similar competitions; capture top kernels and Nth-place solution writeups. |
 | `/kaggle-fork <owner>/<slug> <work-dir>` | Pull, lock metadata, patch notebook, and run preflight. Never auto-pushes. |
 | `/kaggle-data <subcmd> ...` | Download competition/dataset files, initialize local dataset metadata, or create/version Kaggle Datasets after confirmation. |
+| `/kaggle-submit <competition> --kernel <owner>/<slug> --version <N> -m "message"` | Validate output/logs, ask for confirmation, then submit a completed notebook version to a code competition. |
 | `/kaggle-experiment <subcmd> --competition <slug> ...` | Append-only experiment ledger. Subcommands: `add`, `update`, `list`, `show`, `report`. |
 | `/kaggle-watch <slug>` | Diff new public kernels and discussion topics against the saved watch state. |
 | `/kaggle-diagnose <symptom> [--log path]` | Match the symptom against the diagnostics error table and the fatal-marker scan. |
@@ -60,6 +61,8 @@ The uninstaller deletes files one explicit path at a time and only removes direc
 /kaggle-fork <owner>/<slug> work/baseline --new-slug me/birdclef-2026-p0 --title "birdclef 2026 p0 baseline"
 # after kaggle kernels push
 /kaggle-experiment add --competition birdclef-2026 --phase P0 --kernel me/birdclef-2026-p0 --version 1 --status RUNNING
+# after the notebook completes and validation is clean
+/kaggle-submit birdclef-2026 --kernel me/birdclef-2026-p0 --version 1 -m "P0 baseline replay"
 # after run completes
 /kaggle-experiment update --competition birdclef-2026 --id exp-001 --status COMPLETE --public-score 0.812
 /kaggle-experiment report --competition birdclef-2026
@@ -98,6 +101,7 @@ research/<slug>/
 ## Safety
 
 - Never auto-pushes a kernel or auto-submits to the leaderboard. Both require explicit user confirmation per invocation.
+- Notebook-version submissions use `kaggle competitions submit <competition> -k <kernel> -f <output-file> -v <version> -m <message>` after validation and confirmation.
 - Never uploads local data to Kaggle without an explicit `--yes` gate and a visible file/metadata preflight.
 - Never modifies `git config` or runs destructive git commands.
 - Treats `kaggle.json` as secret material.
@@ -119,6 +123,7 @@ kaggle-skills/
 │   ├── kaggle-past.md
 │   ├── kaggle-fork.md
 │   ├── kaggle-data.md
+│   ├── kaggle-submit.md
 │   ├── kaggle-experiment.md
 │   ├── kaggle-watch.md
 │   └── kaggle-diagnose.md
@@ -134,6 +139,7 @@ kaggle-skills/
     ├── research_competition.py
     ├── past_competitions.py
     ├── kaggle_data.py
+    ├── submit_notebook.py
     ├── preflight_check.py
     ├── apply_ipynb_patch.py
     ├── monitor_kernel.py

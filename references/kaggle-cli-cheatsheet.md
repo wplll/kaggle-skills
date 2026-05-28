@@ -24,9 +24,11 @@ kaggle competitions files <competition>
 kaggle competitions download <competition> -p data
 kaggle competitions submissions <competition>
 kaggle competitions submit <competition> -f submission.csv -m "message"
+kaggle competitions submit <competition> -k <owner>/<slug> -f submission.csv -v <version> -m "message"
 ```
 
 Only use `competitions submit` when competition rules allow file submission and the user confirms quota use.
+For code competitions, `-k/--kernel` names the notebook, `-f/--file` names the output file produced by that notebook, and `-v/--version` selects the notebook version.
 
 ## Competition Discussions
 

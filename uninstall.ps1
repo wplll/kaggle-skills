@@ -70,6 +70,7 @@ $commandFiles = @(
     'kaggle-past.md',
     'kaggle-fork.md',
     'kaggle-data.md',
+    'kaggle-submit.md',
     'kaggle-experiment.md',
     'kaggle-watch.md',
     'kaggle-diagnose.md'
