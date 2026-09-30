@@ -1,0 +1,248 @@
+{
+  "report_date": "2026-10-01",
+  "evidence_cutoff": "2026-09-30",
+  "scope": "Historical local records and API/source snapshots; not a new model run or final private leaderboard verification.",
+  "reproducibility_limit": "Original project artifacts are not bundled. Hashes enable matching existing originals; this repository contains aggregate evidence only.",
+  "submission_snapshot": {
+    "total": 116,
+    "scored_without_error": 103,
+    "errors": 13,
+    "highest_public_score": 0.956
+  },
+  "training_pools": {
+    "original423": {
+      "records": 423,
+      "unique": 72,
+      "prefix_counts": {
+        "44b6": 14,
+        "6bba": 58
+      }
+    },
+    "expanded930": {
+      "records": 930,
+      "unique": 166,
+      "prefix_counts": {
+        "44b6": 52,
+        "6bba": 114
+      }
+    },
+    "original172": {
+      "records": 172,
+      "unique": 172,
+      "prefix_counts": {
+        "44b6": 58,
+        "6bba": 114
+      }
+    },
+    "excluded23": {
+      "records": 23,
+      "unique": 23,
+      "prefix_counts": {
+        "44b6": 11,
+        "6bba": 12
+      }
+    },
+    "development12": {
+      "records": 12,
+      "unique": 12,
+      "prefix_counts": {
+        "44b6": 6,
+        "6bba": 6
+      }
+    },
+    "retained11": {
+      "records": 11,
+      "unique": 11,
+      "prefix_counts": {
+        "44b6": 5,
+        "6bba": 6
+      }
+    },
+    "secondary_train": {
+      "records": 199,
+      "unique": 199,
+      "prefix_counts": {
+        "44b6": 71,
+        "6bba": 128
+      }
+    },
+    "secondary_test": {
+      "records": 40,
+      "unique": 40,
+      "prefix_counts": {
+        "44b6": 40
+      }
+    },
+    "deepcenter_train": {
+      "records": 71,
+      "unique": 71,
+      "prefix_counts": {
+        "44b6": 71
+      }
+    },
+    "deepcenter_val": {
+      "records": 128,
+      "unique": 128,
+      "prefix_counts": {
+        "6bba": 128
+      }
+    }
+  },
+  "provenance_findings": {
+    "secondary_train_contains_dev12": 12,
+    "secondary_train_contains_retained11": 11,
+    "secondary_train_test_overlap": 40,
+    "independent_embryos": 2,
+    "primary_training_list": "unknown"
+  },
+  "five_video_metrics": [
+    {
+      "arm": "B-fixed",
+      "adjusted_edge": 0.9217817642168922,
+      "ordinary_tp": 2789,
+      "ordinary_fp": 116,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R1_point+KL",
+      "adjusted_edge": 0.9206631496540733,
+      "ordinary_tp": null,
+      "ordinary_fp": null,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R1_roi+forward_KL",
+      "adjusted_edge": 0.9212900056059806,
+      "ordinary_tp": null,
+      "ordinary_fp": null,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R2_temporal+KL",
+      "adjusted_edge": 0.9206530466874184,
+      "ordinary_tp": null,
+      "ordinary_fp": null,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R1_roi+fused_KL",
+      "adjusted_edge": 0.9213114134960497,
+      "ordinary_tp": null,
+      "ordinary_fp": null,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R1_roi+child_CE",
+      "adjusted_edge": 0.9214404128748717,
+      "ordinary_tp": 2789,
+      "ordinary_fp": 117,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R1_roi+balanced423",
+      "adjusted_edge": 0.9213372316198561,
+      "ordinary_tp": 2789,
+      "ordinary_fp": 117,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R1_roi+expanded930",
+      "adjusted_edge": 0.921556985029713,
+      "ordinary_tp": 2789,
+      "ordinary_fp": 116,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R4_logp",
+      "adjusted_edge": 0.9207170471346663,
+      "ordinary_tp": 2788,
+      "ordinary_fp": 118,
+      "division_tp": 1,
+      "division_fp": 0
+    },
+    {
+      "arm": "R4_zero",
+      "adjusted_edge": 0.9217826357358756,
+      "ordinary_tp": 2789,
+      "ordinary_fp": 116,
+      "division_tp": 1,
+      "division_fp": 0
+    }
+  ],
+  "sources": [
+    {
+      "project_relative_path": "research/biohub_postmortem_top_solutions_20260930.md",
+      "bytes": 14414,
+      "sha256": "33277b16e8457ff05d4babd66177795bf83a1fe1442ff122268e20e8c89a7c09"
+    },
+    {
+      "project_relative_path": "research/champion_0953_generalization_and_final_plan_20260926.md",
+      "bytes": 30451,
+      "sha256": "c85a8bd8a371f808155ff8d7973caedfea0a425995833146785b26dee90b3ce1"
+    },
+    {
+      "project_relative_path": "research/full_coverage_results_review_20260928.md",
+      "bytes": 4876,
+      "sha256": "952abc23dadfdf4762ad65fda1eb6e304a623c6f084a757630fe78712d408083"
+    },
+    {
+      "project_relative_path": "research/coordinate_pooled_refit_results_20260928.md",
+      "bytes": 3194,
+      "sha256": "a6d16796832b23c9ade010f3bffa1b68bc604c27c57bf38e22ed688071d9f58e"
+    },
+    {
+      "project_relative_path": "research/embryo_balance_results_review_20260929.md",
+      "bytes": 3632,
+      "sha256": "3c75ee199177986e1b46f2983e5baf40e2414b8a389f37ce1eed3177d289c050"
+    },
+    {
+      "project_relative_path": "research/motion_cost_results_review_20260929.md",
+      "bytes": 3072,
+      "sha256": "8224958c10e3731d387ce63001ad17dfddbaa0ad1e9bdc8e3e6a12184ec7f70a"
+    },
+    {
+      "project_relative_path": "research/final_two_submission_selection_20260930.md",
+      "bytes": 6826,
+      "sha256": "89134c14db40ea85f486ce7aa682d777fa9e759b2379349753ae5e5e3d84270a"
+    },
+    {
+      "project_relative_path": "artifacts/generalization_report_20260926_133019/data_selection_audit.json",
+      "bytes": 4755,
+      "sha256": "d1a95ee5dacf8d11ac62a33d5172b11cb4db65ba14ed3d16d795fc4973aaea86"
+    },
+    {
+      "project_relative_path": "artifacts/generalization_report_20260926_133019/model_training_provenance.json",
+      "bytes": 5906,
+      "sha256": "237883617fdba7971c62982d400e8d1a69c9faa49cc7e8375ff49e866b9533a2"
+    },
+    {
+      "project_relative_path": "artifacts/generalization_report_20260926_133019/historical_training_five_video.csv",
+      "bytes": 1054,
+      "sha256": "0eba293ecd51cee8d55262cb0af7513a86207af39723151c47f63ca077134a64"
+    },
+    {
+      "project_relative_path": "artifacts/final_two_selection_20260930_012529/submission_inventory.csv",
+      "bytes": 17750,
+      "sha256": "399418dbd8f05e1ef54365ad4f279ad78459a18eff7c9950528fe6087ef8a4e4"
+    },
+    {
+      "project_relative_path": "artifacts/postmortem_top_20260930_175750/leaderboard.json",
+      "bytes": 4171,
+      "sha256": "1209ec3a063140d16c5194f10e8585d1d1d4e3548f6e238087ff89206568650a"
+    },
+    {
+      "project_relative_path": "artifacts/postmortem_top_20260930_175750/public_kernels.json",
+      "bytes": 10692,
+      "sha256": "2322bae860fe7a87c8d0b3a50aae2dc14b31b34cdc4c4e971e1c179c4556abf1"
+    }
+  ],
+  "public_code_caveat": "Current public code behavior and author reports; no verified full final top-three solution or per-version score binding."
+}

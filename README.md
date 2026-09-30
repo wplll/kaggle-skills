@@ -1,149 +1,85 @@
-# kaggle-skills
+# Kaggle Skills：有证据的比赛实验流程
 
-End-to-end Kaggle competition automation for Claude Code: research a competition from a slug, archive past editions and similar competitions, download/upload Kaggle data safely, fork and patch notebooks safely, push and monitor kernels, submit completed notebook versions after confirmation, diagnose failures, and keep an append-only experiment ledger — all surfaced as slash commands.
+当前推荐入口是 **[ml-competition-workflow](skills/ml-competition-workflow/SKILL.md)**。它将数据独立性、可学习监督、部署接入、方向停止和提交完整性放在模型试验之前，适用于Kaggle及其他机器学习比赛。
 
-## Install
+本次更新来自[Biohub 2026详细复盘](reports/biohub-2026/postmortem.zh-CN.md)。报告区分可核实事实、推断和未知；不将赛后公开资料当成赛时可得证据，也不承诺使用流程即可获奖。
 
-### Windows / PowerShell
+## 使用
 
-```powershell
-cd <path-to>\kaggle-skills
-pwsh -File install.ps1            # user-wide: %USERPROFILE%\.claude
-pwsh -File install.ps1 -Force     # overwrite an earlier version
-pwsh -File install.ps1 -Scope project  # install into ./.claude in CWD
-```
-
-### macOS / Linux / WSL
-
-```bash
-cd <path-to>/kaggle-skills
-./install.sh                      # user-wide: ~/.claude
-./install.sh --force              # overwrite an earlier version
-./install.sh --project            # install into ./.claude in CWD
-```
-
-After install, restart Claude Code so it picks up the new commands.
-
-### Uninstall
-
-```powershell
-pwsh -File uninstall.ps1          # remove from %USERPROFILE%\.claude
-pwsh -File uninstall.ps1 -DryRun  # preview only
-```
-
-```bash
-./uninstall.sh                    # remove from ~/.claude
-./uninstall.sh --dry-run          # preview only
-```
-
-The uninstaller deletes files one explicit path at a time and only removes directories when they are empty.
-
-## Slash Commands
-
-| Command | Purpose |
-|---|---|
-| `/kaggle-research <slug>` | Run the full research pipeline; write `report.md`, `state.json`, and `raw/` archives. |
-| `/kaggle-past <slug>` | Archive past editions and similar competitions; capture top kernels and Nth-place solution writeups. |
-| `/kaggle-fork <owner>/<slug> <work-dir>` | Pull, lock metadata, patch notebook, and run preflight. Never auto-pushes. |
-| `/kaggle-data <subcmd> ...` | Download competition/dataset files, initialize local dataset metadata, or create/version Kaggle Datasets after confirmation. |
-| `/kaggle-submit <competition> --kernel <owner>/<slug> --version <N> -m "message"` | Validate output/logs, ask for confirmation, then submit a completed notebook version to a code competition. |
-| `/kaggle-experiment <subcmd> --competition <slug> ...` | Append-only experiment ledger. Subcommands: `add`, `update`, `list`, `show`, `report`. |
-| `/kaggle-watch <slug>` | Diff new public kernels and discussion topics against the saved watch state. |
-| `/kaggle-diagnose <symptom> [--log path]` | Match the symptom against the diagnostics error table and the fatal-marker scan. |
-
-## Typical Flow
+安装到Codex后，可以输入：
 
 ```text
-/kaggle-research birdclef-2026
-/kaggle-data download-competition birdclef-2026 data/birdclef-2026 --unzip
-/kaggle-past birdclef-2026 --auto-years --years 2021 2025
-# pick a baseline from research/birdclef-2026/report.md
-/kaggle-fork <owner>/<slug> work/baseline --new-slug me/birdclef-2026-p0 --title "birdclef 2026 p0 baseline"
-# after kaggle kernels push
-/kaggle-experiment add --competition birdclef-2026 --phase P0 --kernel me/birdclef-2026-p0 --version 1 --status RUNNING
-# after the notebook completes and validation is clean
-/kaggle-submit birdclef-2026 --kernel me/birdclef-2026-p0 --version 1 -m "P0 baseline replay"
-# after run completes
-/kaggle-experiment update --competition birdclef-2026 --id exp-001 --status COMPLETE --public-score 0.812
-/kaggle-experiment report --competition birdclef-2026
-/kaggle-watch birdclef-2026
+使用 $ml-competition-workflow 审计当前比赛的数据、验证和已有结果，确定最有依据的下一轮实验。
 ```
 
-## Output Layout
+或者指定阶段：
 
-```
-research/<slug>/
-├── report.md            # research synthesis
-├── state.json           # watch cursors and history
-├── experiments.jsonl    # append-only experiment ledger
-├── experiments.md       # rendered experiment summary
-├── watch_delta.json     # most recent /kaggle-watch diff
-├── data/                # optional downloaded competition/dataset files
-├── raw/                 # archived CLI/API outputs
-└── past/
-    ├── index.md         # cross-edition index
-    ├── past_state.json
-    └── <slug>/
-        ├── summary.md
-        └── raw/
-            ├── competition.json
-            ├── kernels_*.txt
-            ├── topics.json
-            └── topic_details/<id>.json
+- “按这个skill检查为什么本地提升而线上退化。”
+- “使用全部允许训练数据，制定并执行预算内的实验，报告实际消费覆盖。”
+- “准备最终拟合和推送运行；不要比赛提交。”
+- “复盘这次比赛，明确哪些方向应停止及下一场流程。”
+
+skill会从当前阶段接续，不要求每次重跑完整审计；训练、上传、提交和自动监控仍遵守用户已有授权。
+
+## 安装
+
+需要现有Python 3解释器；新skill和安装器不需要Kaggle包，也不安装任何依赖。请使用项目指定解释器。
+
+Windows PowerShell：
+
+```powershell
+$PythonExe = "C:\path\to\python.exe"
+& $PythonExe .\scripts\install_workflow.py
 ```
 
-## Requirements
+将示例路径换成实际解释器。默认安装到`$CODEX_HOME/skills/ml-competition-workflow`；未设置CODEX_HOME则使用`~/.codex/skills/ml-competition-workflow`。
 
-- Python 3.9+ with the `kaggle` package importable (`python -m kaggle.cli --version` should work).
-- A configured `kaggle.json`; the skills never prints its contents.
-- On Windows, the install scripts assume PowerShell. Set `$env:PYTHONUTF8=1` and `$env:PYTHONIOENCODING="utf-8"` before manual Kaggle CLI runs.
+指定其他技能目录：
 
-## Safety
-
-- Never auto-pushes a kernel or auto-submits to the leaderboard. Both require explicit user confirmation per invocation.
-- Notebook-version submissions use `kaggle competitions submit <competition> -k <kernel> -f <output-file> -v <version> -m <message>` after validation and confirmation.
-- Never uploads local data to Kaggle without an explicit `--yes` gate and a visible file/metadata preflight.
-- Never modifies `git config` or runs destructive git commands.
-- Treats `kaggle.json` as secret material.
-- Internal Kaggle JSON endpoints are used only for read-only fallback when the installed CLI lacks Discussion/topic commands; raw responses are archived under `raw/` and labeled.
-
-## Layout in the Repo
-
+```powershell
+& $PythonExe .\scripts\install_workflow.py --target-root "C:\path\to\skills"
 ```
-kaggle-skills/
-├── SKILL.md
-├── README.md
-├── install.ps1
-├── install.sh
-├── uninstall.ps1
-├── uninstall.sh
-├── agents/openai.yaml
-├── commands/                 # slash-command definitions
-│   ├── kaggle-research.md
-│   ├── kaggle-past.md
-│   ├── kaggle-fork.md
-│   ├── kaggle-data.md
-│   ├── kaggle-submit.md
-│   ├── kaggle-experiment.md
-│   ├── kaggle-watch.md
-│   └── kaggle-diagnose.md
-├── references/
-│   ├── research-pipeline.md
-│   ├── past-competitions.md
-│   ├── data-workflow.md
-│   ├── workflow.md
-│   ├── kaggle-cli-cheatsheet.md
-│   ├── submission-strategy.md
-│   └── diagnostics.md
-└── scripts/
-    ├── research_competition.py
-    ├── past_competitions.py
-    ├── kaggle_data.py
-    ├── submit_notebook.py
-    ├── preflight_check.py
-    ├── apply_ipynb_patch.py
-    ├── monitor_kernel.py
-    ├── verify_kernel_log.py
-    ├── update_research_watch.py
-    └── record_experiment.py
+
+安装器仅创建新安装或确认现有内容完全一致。遇到不同版本会停止，不删除、不覆盖，也不自动移动旧文件。发现列表未刷新时开启新会话。
+
+也可手动将`skills/ml-competition-workflow`复制到目标技能目录，保持文件夹名不变。
+
+## 文件结构
+
+|路径|用途|
+|---|---|
+|`skills/ml-competition-workflow/SKILL.md`|当前比赛研究与执行入口|
+|`skills/ml-competition-workflow/references/`|数据验证、实验决策、提交、记录模板、案例|
+|`scripts/install_workflow.py`|不覆盖旧版本的跨平台安装器|
+|`tests/test_install_workflow.py`|安装、重复调用、冲突和路径测试|
+|`reports/biohub-2026/`|详细复盘、汇总证据与来源哈希|
+|`validation/workflow-20261001.md`|技能结构检查及场景走查记录|
+
+## 相对于旧工具的改进
+
+原仓库擅长资料抓取、Notebook操作和提交账本。新skill补充了原流程中不足的研究判断：
+
+1. 按患者/胚胎/地点等真实来源审计独立性与预训练暴露。
+2. 区分允许数据池、实际唯一消费和重复监督曝光。
+3. 在扩结构前确认难例可达、特征可辨、监督可学和后续可保留。
+4. 将实现复现与最终效果分成两层验收。
+5. 为无收益方向设置复审和停止条件，避免无穷诊断或同类微调。
+6. 将Notebook完成、推送、提交和有效评分分别记录。
+7. 验证隐藏规模资源和最终产物完整性，而非只看占位样本。
+
+## 历史工具
+
+根目录原`SKILL.md`、`commands/`、旧`references/`及Kaggle操作脚本保留作参考，未纳入新安装器的载荷。新入口不依赖它们。
+
+旧`install.ps1`、`install.sh`及卸载脚本面向Claude Code，部分含覆盖或删除行为；它们不是当前推荐安装入口，本次未执行。需要Kaggle CLI工具时按具体任务检查当前API和授权，不直接照搬旧版本参数或自动监控流程。
+
+## 验证
+
+```powershell
+& $PythonExe -m unittest discover -s tests -v
+& $PythonExe scripts/install_workflow.py --help
 ```
+
+测试使用独立新目录并保留产物，不自动清理。可以通过`KAGGLE_SKILLS_TEST_ROOT`指定测试产物父目录。结构验证使用Codex自带skill-creator的`quick_validate.py`；具体检查结果见验证记录。
+
+本仓库不包含比赛图像、GT、权重、教师缓存或凭证。复盘中的模型成绩为注明日期和口径的历史记录，不代表最新或最终私榜结果。
